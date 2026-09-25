@@ -1,6 +1,6 @@
 # Known Good Media
 
-Recruiting highlight and hype videos for high school football and basketball players. **Get Known.**
+Recruiting highlight and hype videos for high school athletes in every sport. **Get Known.**
 
 This repo holds the business website and the brand files.
 
