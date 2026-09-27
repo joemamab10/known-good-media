@@ -2,8 +2,8 @@
 // Leave SUPABASE_URL empty to run in DEMO MODE (everything is saved only in this browser).
 // See portal/SETUP.md for how to fill these in.
 window.KGM_CONFIG = {
-  SUPABASE_URL: "",        // e.g. "https://abcd1234.supabase.co"
-  SUPABASE_ANON_KEY: "",   // the "anon public" key (safe to publish; data is protected by row-level security)
+  SUPABASE_URL: "https://cvqqibakjptnmutdwnni.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2cXFpYmFranB0bm11dGR3bm5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MjAxMTYsImV4cCI6MjEwNjA5NjExNn0.OQQOaS6yN9D4Kxx0XE1O3TAgLoZfQe7-TSSGRpQIrlA", // public "anon" key; row-level security protects the data
 
   CONTACT_EMAIL: "jbejarno@gmail.com",
 
