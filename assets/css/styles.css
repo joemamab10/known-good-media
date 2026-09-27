@@ -95,9 +95,9 @@ img { max-width: 100%; height: auto; display: block; }
 /* Sections */
 .section { padding: clamp(64px, 9vw, 110px) clamp(16px, 4vw, 48px); max-width: 1280px; margin: 0 auto; }
 .section-alt { max-width: none; background: var(--panel); }
-.section-alt > * { max-width: 1184px; margin-left: auto; margin-right: auto; }
+.section-alt > * { max-width: 1184px; margin-left: auto !important; margin-right: auto !important; }
 .section-title {
-  margin: 0 0 12px; text-align: center;
+  margin: 0 auto 12px; text-align: center;
   font-family: var(--display); font-weight: 400; text-transform: uppercase;
   font-size: clamp(40px, 6vw, 72px); line-height: 1; letter-spacing: 0.02em;
 }
@@ -121,6 +121,7 @@ img { max-width: 100%; height: auto; display: block; }
 .pkg-desc { margin: 0; color: var(--muted); }
 .pkg ul { margin: 6px 0 18px; padding-left: 20px; flex-grow: 1; }
 .pkg li { margin-bottom: 6px; }
+.pkg .btn { width: 100%; min-height: 52px; white-space: nowrap; }
 
 /* Steps */
 .steps { list-style: none; padding: 0; margin: 44px auto 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
@@ -152,6 +153,8 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 .footer p { margin: 0; }
 .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
 .footer-links a { text-decoration: none; }
+.footer-small { font-size: 13px; opacity: .7; }
+.btn { white-space: nowrap; }
 
 /* Responsive */
 @media (max-width: 1000px) {
@@ -160,5 +163,9 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 }
 @media (max-width: 720px) {
   .nav nav a:not(.btn) { display: none; }
+  .nav nav { gap: 10px; }
+  .nav .btn-small { min-height: 40px; padding: 0 12px; font-size: 14px; letter-spacing: 0.08em; }
+  .nav-logo img { width: 110px; }
+  .book .btn { width: 100%; max-width: 300px; }
   .packages, .steps, .work-grid, .band { grid-template-columns: minmax(0, 1fr); }
 }
