@@ -142,6 +142,10 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--muted); font-family: var(--label); letter-spacing: 0.08em; text-transform: uppercase;
   text-decoration: none; transition: border-color .2s, color .2s;
 }
+.work-card:not(.work-video) { aspect-ratio: auto; min-height: 220px; }
+.work-video { display: block; margin: 0; padding: 0; aspect-ratio: auto; border-style: solid; overflow: hidden; }
+.work-video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.work-video figcaption { padding: 12px 14px; font-size: 14px; }
 a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 
 /* Footer */
