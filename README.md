@@ -17,8 +17,7 @@ This repo holds the business website and the brand files.
 
 1. In this repo on GitHub, open **Settings → Pages**.
 2. Under **Build and deployment**, set Source to **Deploy from a branch**, pick `main` and `/ (root)`, then **Save**.
-3. After a minute the site is live at `https://joemamab10.github.io/known-good-media/`.
-4. When you buy `knowngoodmedia.com`, add it under **Settings → Pages → Custom domain** and follow the DNS steps GitHub shows.
+3. The site is live at **https://knowngoodmedia.com** (custom domain set under **Settings → Pages**, DNS at Porkbun).
 
 ## Still to fill in
 

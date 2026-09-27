@@ -9,7 +9,7 @@ About 30 minutes, one time.
 1. Create a free account at https://supabase.com and click **New project**. Name it `known-good-media`, pick a strong database password (save it), region **US East** or **US Central**.
 2. Open **SQL Editor → New query**, paste all of [`supabase/schema.sql`](supabase/schema.sql), and click **Run**.
 3. Go to **Authentication → URL Configuration**:
-   - **Site URL:** `https://knowngoodmedia.com/portal/` (or `https://joemamab10.github.io/known-good-media/portal/` until the domain is set up)
+   - **Site URL:** `https://knowngoodmedia.com/portal/`
    - Add the same address under **Redirect URLs**.
 4. Go to **Authentication → Email Templates → Magic Link** and change the subject to "Your Known Good Media sign-in link".
 5. Go to **Project Settings → API** and copy:
