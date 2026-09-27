@@ -139,7 +139,9 @@ img { max-width: 100%; height: auto; display: block; }
   aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; padding: 16px; text-align: center;
   background: var(--panel); border: 1px dashed var(--line); border-radius: 12px;
   color: var(--muted); font-family: var(--label); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; transition: border-color .2s, color .2s;
 }
+a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 
 /* Footer */
 .footer {
