@@ -137,18 +137,18 @@
     const grid = h("div", { class: "grid" },
       f("name", "Athlete name", { full: true, ph: "First and last name" }),
       f("sport", "Sport", { select: SPORTS }),
-      f("position", "Position", { ph: "e.g. RB/DE, CF, PG" }),
-      f("grad_year", "Grad year", { ph: "2030", inputmode: "numeric" }),
-      f("number", "Jersey #", { ph: "10", inputmode: "numeric" }),
-      f("school", "School or team", { full: true, ph: "Dallas Center-Grimes" }),
-      f("height", "Height", { ph: "6'2\"" }),
-      f("weight", "Weight", { ph: "175 lbs" }),
-      f("gpa", "GPA", { ph: "3.8", hint: "Coaches filter on academics first. It gets highlighted on the card." }),
-      f("test_score", "ACT / SAT", { ph: "optional" }),
+      f("position", "Position", { ph: "e.g. WR, Point guard, Pitcher" }),
+      f("grad_year", "Grad year", { ph: "e.g. 2028", inputmode: "numeric" }),
+      f("number", "Jersey #", { ph: "e.g. 7", inputmode: "numeric" }),
+      f("school", "School or team", { full: true, ph: "High school or club team" }),
+      f("height", "Height", { ph: "e.g. 5'10\"" }),
+      f("weight", "Weight", { ph: "e.g. 165 lbs" }),
+      f("gpa", "GPA", { ph: "e.g. 3.5", hint: "Coaches filter on academics first. It gets highlighted on the card." }),
+      f("test_score", "ACT / SAT", { ph: "e.g. ACT 26 (optional)" }),
       h("div", { class: "full stack", style: "gap:8px" }, h("span", { class: "eyebrow", style: "color:var(--muted)" }, "Measurables"),
         h("span", { class: "hint" }, "Fill in what you have; leave the rest blank. Tested numbers (combines, showcases) carry the most weight.")),
       details,
-      f("stats", "Season stats line", { full: true, ph: "e.g. AVG .412 · HR 9 · RBI 31" }),
+      f("stats", "Season stats line", { full: true, ph: "Your best numbers this season (optional)" }),
       f("profile_link", "Recruiting profile link", { full: true, ph: "Hudl, Perfect Game, MaxPreps (optional)" }));
     grid.querySelector("#a_sport").addEventListener("change", (e) => renderDetails(e.target.value, readDetails()));
     function readDetails() {
@@ -322,7 +322,7 @@
       oninput: (e) => (state.links[i] = e.target.value) })),
       h("button", { class: "link", type: "button", onclick: () => { state.links.push(""); drawLinks(); } }, "+ Add another link"));
     drawLinks(); drawList();
-    const notes = h("textarea", { id: "notes", placeholder: "e.g. He's #10 in red. Best plays: 65-yard TD in the 4th vs. Norwalk, the sideline catch in game 2…" });
+    const notes = h("textarea", { id: "notes", placeholder: "e.g. Wearing #7 in white. Best plays: the long TD in the 4th quarter, the diving catch in game 2…" });
     notes.value = state.notes; notes.addEventListener("input", () => (state.notes = notes.value));
     return h("div", { class: "stack" },
       h("div", { class: "card stack" }, h("h2", { class: "h-md" }, "Upload video files"),
