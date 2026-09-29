@@ -49,8 +49,8 @@
   async function chrome(me) {
     const top = document.getElementById("top");
     top.replaceChildren(...[
-      h("a", { class: "wordmark", href: "#/" }, "K", h("b", {}, "NOW"), "N"),
-      h("span", { class: "tag" }, "Parent Portal"),
+      h("a", { class: "wordmark", href: "../", title: "Known Good Media home", "aria-label": "Known Good Media home" }, "K", h("b", {}, "NOW"), "N"),
+      h("a", { class: "tag", href: "#/", style: "text-decoration:none" }, "Parent Portal"),
       h("span", { class: "spacer" }),
       me ? h("span", { class: "who" }, me.email) : null,
       me && me.is_admin ? h("a", { class: "btn ghost sm", href: "#/admin" }, "Orders") : null,
