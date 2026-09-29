@@ -51,3 +51,12 @@ python3 -m reelbuilder.import_order 4f4c64dc   # download photo + film, create t
 python3 -m reelbuilder.findplays jobs/<folder> --top 12 --apply
 ```
 Mark the athlete in the Clip Marker, build, upload the finished reel (YouTube unlisted, Drive or Dropbox), paste the link into the order, and set the status to **Ready for your review**. The family sees the draft on their order page, where they can approve it or ask for changes. (The portal does not send status emails yet, so text or email the family when their draft is ready.)
+
+## Automatic "paid" status (Stripe webhook)
+
+1. Supabase → SQL Editor: run [`supabase/stripe-webhook.sql`](supabase/stripe-webhook.sql).
+2. Supabase → Edge Functions → Deploy a new function → Via editor. Name it `stripe-webhook`, paste [`supabase/functions/stripe-webhook/index.ts`](supabase/functions/stripe-webhook/index.ts), deploy. In the function's settings turn **Verify JWT** off.
+3. Stripe → Developers → Webhooks → Add endpoint: `https://<project>.supabase.co/functions/v1/stripe-webhook`, events `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Copy the signing secret (`whsec_…`).
+4. Supabase → Edge Functions → Secrets: add `STRIPE_WEBHOOK_SECRET` = that `whsec_…` value.
+
+Paid orders now flip to **Paid** on their own, with the amount Stripe collected shown on the order.

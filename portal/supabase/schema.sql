@@ -147,3 +147,5 @@ create policy "admin deliveries" on storage.objects for insert
 
 -- ---------- make yourself the admin (after you sign in to the portal once) ----------
 -- update public.profiles set is_admin = true where email = 'YOUR EMAIL';
+
+-- Stripe auto-paid: run supabase/stripe-webhook.sql after this file (it updates guard_order and adds paid_amount/stripe_session).

@@ -497,7 +497,9 @@
         h("div", { class: "card" }, h("h2", { class: "h-md", style: "margin-bottom:14px" }, "Progress"), tl),
         h("div", { class: "card stack" }, h("h2", { class: "h-md" }, "Order details"),
           h("dl", { class: "kv" },
-            h("dt", {}, "Package"), h("dd", {}, `${p?.name || o.package}${o.rush ? " + rush" : ""} · ${money(o.price)}${o.paid ? " · paid" : ""}`),
+            h("dt", {}, "Package"), h("dd", {}, `${p?.name || o.package}${o.rush ? " + rush" : ""} · ${money(o.price)}${o.paid ? (o.paid_amount != null ? ` · paid ${money(o.paid_amount)} via Stripe` : " · paid") : ""}`,
+              o.paid && o.paid_amount != null && Number(o.paid_amount) < Number(o.price)
+                ? h("span", { class: "small", style: "display:block;color:var(--warn,#FFB547)" }, `Paid ${money(o.price - o.paid_amount)} less than the order total. Check Stripe.`) : null),
             h("dt", {}, "Athlete"), h("dd", {}, [a.sport, a.position, a.grad_year && "Class of " + a.grad_year, a.school].filter(Boolean).join(" · ") || "–"),
             h("dt", {}, "Card"), h("dd", {}, [a.height, a.weight, a.gpa && "GPA " + a.gpa, ...(a.details || []).map((d) => `${d.label} ${d.value}`)].filter(Boolean).join(" · ") || "–"),
             h("dt", {}, "Notes"), h("dd", {}, o.notes || "–"),
