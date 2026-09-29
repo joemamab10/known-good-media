@@ -10,13 +10,13 @@ window.KGM_CONFIG = {
   // Packages shown to parents. Paste each package's Stripe Payment Link into `pay`.
   // The portal adds ?client_reference_id=<order id> so you can match payments to orders in Stripe.
   PACKAGES: [
-    { id: "unknown", name: "Unknown", price: 89, plays: "Up to 8 plays",
+    { id: "unknown", name: "Unknown", price: 75, plays: "Up to 8 plays",
       includes: ["Player card with photo", "Music", "Delivered in 5 days"], pay: "" },
-    { id: "known", name: "Known", price: 159, plays: "Up to 15 plays",
+    { id: "known", name: "Known", price: 150, plays: "Up to 15 plays",
       includes: ["Full hype edit + smart zoom", "Slow-mo replays", "Team-color branding", "1 revision"], pay: "" },
-    { id: "well-known", name: "Well-Known", price: 249, plays: "Up to 25 plays", featured: true,
+    { id: "well-known", name: "Well-Known", price: 250, plays: "Up to 25 plays", featured: true,
       includes: ["Everything in Known", "Vertical cut for Instagram/TikTok", "Recruiting graphic", "2 revisions"], pay: "" },
-    { id: "household-name", name: "Household Name", price: 539, plays: "Full season",
+    { id: "household-name", name: "Household Name", price: 500, plays: "Full season",
       includes: ["We film 4 games", "Mid + end-of-season reels", "Social cuts all season"], pay: "" },
   ],
   RUSH: { price: 35, label: "Rush delivery (48 hours)" },

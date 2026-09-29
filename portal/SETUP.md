@@ -26,7 +26,7 @@ About 30 minutes, one time.
 ## 2. Stripe (payments)
 
 1. Create an account at https://stripe.com and finish business verification.
-2. **Product catalog → Add product** for each package (Unknown $89, Known $159, Well-Known $249, Household Name $539). Add a "Rush delivery" product ($35) too.
+2. **Product catalog → Add product** for each package (Unknown $75, Known $150, Well-Known $250, Household Name $500). Add a "Rush delivery" product ($35) too.
 3. For each package, **Create payment link**. Under **After payment**, choose "Don't show confirmation page" and redirect to `https://knowngoodmedia.com/portal/`.
 4. Paste each link into that package's `pay` field in `portal/config.js`.
 5. When a payment comes in, Stripe shows the order id in the payment's **client_reference_id**. Open that order in the portal, tick **Payment received**, and it moves to Paid.
