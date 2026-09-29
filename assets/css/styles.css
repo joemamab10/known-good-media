@@ -176,3 +176,14 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
   .eyebrow { letter-spacing: 0.2em; font-size: 13px; }
   .packages, .steps, .work-grid, .band { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Payment success banner (Stripe redirects to /?paid=1) */
+.paid-banner { position: relative; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
+  max-width: 1184px; margin: 16px auto 0; padding: 16px 48px 16px 20px; border: 1px solid var(--blue);
+  border-radius: 10px; background: #12203a; color: var(--white); }
+.paid-banner[hidden] { display: none; }
+.paid-banner strong { font-family: var(--label); letter-spacing: 0.06em; text-transform: uppercase; }
+.paid-banner a { color: var(--white); }
+.paid-banner button { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--muted);
+  font-size: 26px; line-height: 1; cursor: pointer; }
+@media (max-width: 720px) { .paid-banner { margin: 12px 16px 0; } }
