@@ -205,7 +205,8 @@
           h("div", { class: "sub" }, [a.number && "#" + a.number, a.school].filter(Boolean).join(" · ")),
           h("div", { class: "tiles" }, [...tiles, ...gpa].slice(0, 6).map(([k, v, hl]) => h("div", { class: "tile" + (hl ? " hl" : "") }, h("b", {}, k), h("span", {}, v))))),
         state.photo_url ? h("img", { class: "photo", src: state.photo_url, alt: `Photo of ${a.name || "athlete"}` })
-          : h("div", { class: "placeholder" }, "Your photo here"));
+          : h("div", { class: "placeholder" }, "Your photo here"),
+        a.number ? h("div", { class: "jersey", "aria-hidden": "true" }, "#" + a.number) : null);
     };
     const check = (file, img) => {
       const out = [];
@@ -535,7 +536,17 @@
       h("div", { class: "row" }, h("button", { class: "btn", onclick: async () => {
         await B.updateOrder(o.id, { status: status.value, paid: paid.checked, reel_url: reel.value.trim() || null, vertical_url: vert.value.trim() || null });
         toast("Order updated"); render();
-      } }, "Save"), h("span", { class: "small muted" }, `Parent: ${o.parent_email || "–"}`)));
+      } }, "Save"), h("span", { class: "small muted" }, `Parent: ${o.parent_email || "–"}`),
+        h("button", { class: "btn ghost sm danger", style: "margin-left:auto", onclick: () => deleteOrder(o, () => go("#/admin")) }, "Delete order")));
+  }
+
+  async function deleteOrder(o, after) {
+    const who = o.athlete?.name || "this athlete";
+    const msg = `Delete the order for ${who}? This removes the order and its uploaded film for good.` +
+      (o.paid ? "\n\nThis order is marked paid. Deleting it does not refund the payment; do that in Stripe if needed." : "");
+    if (!confirm(msg)) return;
+    try { await B.deleteOrder(o.id); toast("Order deleted"); after(); }
+    catch (e) { toast(e.message || "Couldn't delete the order"); }
   }
 
   async function downloadJob(o) {
@@ -571,7 +582,10 @@
         h("td", {}, pkgOf(o.package)?.name || o.package, o.rush ? " + rush" : ""),
         h("td", { class: "num" }, money(o.price), o.paid ? " ✓" : ""),
         h("td", {}, pill(o.status)),
-        h("td", { class: "num" }, fmtDate(o.created_at)))) : [h("tr", {}, h("td", { colspan: 6, class: "muted" }, "No orders here."))]));
+        h("td", { class: "num" }, fmtDate(o.created_at)),
+        h("td", {}, h("button", { class: "link danger", "aria-label": "Delete order for " + (o.athlete?.name || "athlete"),
+          onclick: () => deleteOrder(o, () => { orders.splice(orders.indexOf(o), 1); counts[o.status]--; draw(); }) }, "Delete")))) :
+        [h("tr", {}, h("td", { colspan: 7, class: "muted" }, "No orders here."))]));
     };
     draw();
     const open = orders.filter((o) => o.status !== "delivered");
@@ -582,7 +596,7 @@
         h("div", { class: "card tight" }, h("div", { class: "small muted" }, "Waiting on payment"), h("div", { class: "h-lg" }, orders.filter((o) => !o.paid && o.status === "submitted").length)),
         h("div", { class: "card tight" }, h("div", { class: "small muted" }, "Paid revenue"), h("div", { class: "h-lg" }, money(orders.filter((o) => o.paid).reduce((s, o) => s + (o.price || 0), 0))))),
       bar,
-      h("div", { class: "table-wrap" }, h("table", {}, h("thead", {}, h("tr", {}, ["Athlete", "Sport", "Package", "Price", "Status", "Ordered"].map((t) => h("th", {}, t)))), tbody)));
+      h("div", { class: "table-wrap" }, h("table", {}, h("thead", {}, h("tr", {}, ["Athlete", "Sport", "Package", "Price", "Status", "Ordered", ""].map((t) => h("th", {}, t)))), tbody)));
   }
 
   // ---------- athlete edit page ----------

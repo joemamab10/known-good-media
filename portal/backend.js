@@ -74,6 +74,11 @@
       this.data.files.push(row); this._save(); return row;
     }
     async listFiles(orderId) { return this.data.files.filter((f) => f.order_id === orderId); }
+    async deleteOrder(id) {
+      this.data.orders = this.data.orders.filter((o) => o.id !== id);
+      this.data.files = this.data.files.filter((f) => f.order_id !== id);
+      this._save();
+    }
     async fileUrl() { return null; }
   }
 
@@ -167,6 +172,17 @@
     }
     async listFiles(orderId) { const { data, error } = await this.sb.from("order_files").select("*").eq("order_id", orderId).order("created_at"); if (error) throw error; return data; }
     async fileUrl(f) { return this._signed(f.kind === "delivery" ? "deliveries" : "film", f.path); }
+    // Owner only. Removes the order's uploaded film/delivery files, then the order (its file rows go with it).
+    async deleteOrder(id) {
+      const files = await this.listFiles(id);
+      for (const bucket of ["film", "deliveries"]) {
+        const paths = files.filter((f) => (f.kind === "delivery" ? "deliveries" : "film") === bucket).map((f) => f.path);
+        if (paths.length) await this.sb.storage.from(bucket).remove(paths); // best effort; the row delete below is what matters
+      }
+      const { data, error } = await this.sb.from("orders").delete().eq("id", id).select("id");
+      if (error) throw error;
+      if (!data || !data.length) throw new Error("Couldn't delete that order. Run supabase/delete-orders.sql once in Supabase, then try again.");
+    }
   }
 
   function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }

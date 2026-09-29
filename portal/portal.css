@@ -133,6 +133,8 @@ input::placeholder, textarea::placeholder { color: var(--faint); }
 .pcard .tile b { display: block; font: 600 1.6cqw var(--label); letter-spacing: .14em; color: #B4BAC4; text-transform: uppercase; }
 .pcard .tile.hl b { color: rgba(255,255,255,.85); }
 .pcard .tile span { font: 700 3.2cqw var(--label); text-transform: uppercase; }
+.pcard .jersey { position: absolute; right: 3%; top: 6%; z-index: 2; padding: .5cqw 1.4cqw; border-radius: .8cqw;
+  background: var(--card); color: #fff; font: 400 6cqw/1 var(--display); letter-spacing: .02em; box-shadow: 0 .6cqw 2cqw rgba(0,0,0,.45); }
 .pcard .photo { position: absolute; right: 6%; bottom: 0; height: 94%; width: 40%; object-fit: contain; object-position: bottom center; }
 .pcard .placeholder { position: absolute; right: 12%; bottom: 0; width: 28%; height: 82%; border-radius: 40% 40% 0 0;
   background: linear-gradient(#2A2F38, #1A1E25); display: grid; place-items: center; color: var(--faint); font: 600 2.4cqw var(--label);
@@ -187,3 +189,8 @@ td.num { font-variant-numeric: tabular-nums; }
   .order-row .pill { grid-column: 2; justify-self: start; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* delete controls (owner only) */
+.btn.danger { color: #ff6b6b; border-color: rgba(255,107,107,.45); }
+.btn.danger:hover { background: rgba(255,107,107,.12); border-color: #ff6b6b; }
+.link.danger { color: #ff6b6b; }
