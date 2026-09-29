@@ -375,6 +375,7 @@
       h("div", { class: "card stack" },
         h("div", { class: "row between" }, h("span", {}, p.name), h("strong", {}, money(p.price))),
         state.rush ? h("div", { class: "row between" }, h("span", {}, cfg.RUSH.label), h("strong", {}, money(cfg.RUSH.price))) : null,
+        state.rush ? h("p", { class: "callout small", style: "margin:8px 0 0" }, h("strong", {}, "Rush: "), `on the payment page, tap Add next to ${cfg.RUSH.label} so your total is ${money(total(state))}.`) : null,
         h("div", { class: "row between", style: "border-top:1px solid var(--line);padding-top:12px" }, h("span", { class: "h-md" }, "Total"), h("span", { class: "h-lg" }, money(total(state)))),
         h("p", { class: "small muted", style: "margin:0" }, B.mode === "demo" ? "Demo mode: no payment is taken." : "You'll pay securely with Stripe. Your film uploads when you place the order.")));
   }
@@ -431,6 +432,7 @@
     if (!admin && !o.paid && o.status === "submitted") {
       const pay = p?.pay;
       act.append(h("div", { class: "callout" }, h("p", { style: "margin:0 0 10px" }, h("strong", {}, "Payment needed. "), "We start as soon as it's in."),
+        o.rush ? h("p", { class: "small", style: "margin:0 0 10px" }, h("strong", {}, "Rush order: "), `on the payment page, tap Add next to ${cfg.RUSH.label} so the total is ${money(o.price)}.`) : null,
         pay && B.mode !== "demo" ? h("a", { class: "btn", href: `${pay}?client_reference_id=${encodeURIComponent(o.id)}` }, `Pay ${money(o.price)}`)
           : h("p", { class: "small muted", style: "margin:0" }, B.mode === "demo" ? "Demo mode: payment is skipped." : `Questions? Email ${cfg.CONTACT_EMAIL}.`)));
     }

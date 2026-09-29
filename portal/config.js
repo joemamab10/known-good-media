@@ -11,13 +11,13 @@ window.KGM_CONFIG = {
   // The portal adds ?client_reference_id=<order id> so you can match payments to orders in Stripe.
   PACKAGES: [
     { id: "unknown", name: "Unknown", price: 75, plays: "Up to 8 plays",
-      includes: ["Player card with photo", "Music", "Delivered in 5 days"], pay: "" },
+      includes: ["Player card with photo", "Music", "Delivered in 5 days"], pay: "https://buy.stripe.com/dRm28kb537Wh5xQgQe5AQ07" },
     { id: "known", name: "Known", price: 150, plays: "Up to 15 plays",
-      includes: ["Full hype edit + smart zoom", "Slow-mo replays", "Team-color branding", "1 revision"], pay: "" },
+      includes: ["Full hype edit + smart zoom", "Slow-mo replays", "Team-color branding", "1 revision"], pay: "https://buy.stripe.com/eVq28k0qp0tPaSa9nM5AQ06" },
     { id: "well-known", name: "Well-Known", price: 250, plays: "Up to 25 plays", featured: true,
-      includes: ["Everything in Known", "Vertical cut for Instagram/TikTok", "Recruiting graphic", "2 revisions"], pay: "" },
+      includes: ["Everything in Known", "Vertical cut for Instagram/TikTok", "Recruiting graphic", "2 revisions"], pay: "https://buy.stripe.com/7sY6oA7SR6Sd7FYfMa5AQ05" },
     { id: "household-name", name: "Household Name", price: 500, plays: "Full season",
-      includes: ["We film 4 games", "Mid + end-of-season reels", "Social cuts all season"], pay: "" },
+      includes: ["We film 4 games", "Mid + end-of-season reels", "Social cuts all season"], pay: "https://buy.stripe.com/28E00c3CBa4paSa6bA5AQ04" },
   ],
   RUSH: { price: 35, label: "Rush delivery (48 hours)" },
 
