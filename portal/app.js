@@ -150,7 +150,15 @@
       details,
       f("stats", "Season stats line", { full: true, ph: "Your best numbers this season (optional)" }),
       f("profile_link", "Recruiting profile link", { full: true, ph: "Hudl, Perfect Game, MaxPreps (optional)" }));
-    grid.querySelector("#a_sport").addEventListener("change", (e) => renderDetails(e.target.value, readDetails()));
+    // Switching sport swaps in that sport's measurables (e.g. 40 YD -> Exit Velo). What was typed for the
+    // previous sport is remembered while the form is open, so switching back restores it.
+    const bySport = { [a.sport || ""]: a.details || [] };
+    let curSport = a.sport || "";
+    grid.querySelector("#a_sport").addEventListener("change", (e) => {
+      bySport[curSport] = readDetails();
+      curSport = e.target.value;
+      renderDetails(curSport, bySport[curSport] || []);
+    });
     function readDetails() {
       return [...details.querySelectorAll("input")].map((i) => ({ label: i.dataset.label, value: i.value.trim() })).filter((d) => d.value);
     }
