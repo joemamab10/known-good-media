@@ -305,30 +305,61 @@
 
   function filmStep(state) {
     const list = h("div", { class: "list" });
+    const summary = h("p", { class: "small", style: "margin:0" });
+    const warn = h("div", { class: "stack", style: "gap:4px" });
     const input = h("input", { type: "file", accept: "video/*", multiple: true, id: "film" });
-    const drawList = () => list.replaceChildren(...state.films.map((f, i) => h("div", { class: "file" },
-      h("span", { class: "name" }, f.file.name), h("span", { class: "small muted" }, fmtSize(f.file.size),
-        " ", h("button", { class: "link", type: "button", onclick: () => { state.films.splice(i, 1); drawList(); } }, "Remove")))));
-    input.addEventListener("change", () => {
+    const drawList = () => {
+      const total = state.films.reduce((a, f) => a + f.file.size, 0);
+      summary.textContent = state.films.length
+        ? `${state.films.length} video${state.films.length > 1 ? "s" : ""} ready · ${fmtSize(total)} · they upload when you place the order`
+        : "No videos added yet.";
+      summary.className = state.films.length ? "small" : "small muted";
+      list.replaceChildren(...state.films.map((f, i) => {
+        f.url = f.url || URL.createObjectURL(f.file);
+        const thumb = h("video", { src: f.url + "#t=0.5", muted: true, preload: "metadata", playsinline: true,
+          style: "width:96px;height:54px;object-fit:cover;border-radius:6px;background:#000;flex:none" });
+        const dur = h("span", { class: "small muted" });
+        thumb.addEventListener("loadedmetadata", () => {
+          const d = thumb.duration; if (isFinite(d)) dur.textContent = ` · ${Math.floor(d / 60)}:${String(Math.round(d % 60)).padStart(2, "0")}`;
+        });
+        return h("div", { class: "file", style: "grid-template-columns:auto minmax(0,1fr) auto" },
+          thumb,
+          h("div", { style: "min-width:0" }, h("div", { class: "name" }, f.file.name), h("span", { class: "small muted" }, fmtSize(f.file.size)), dur),
+          h("button", { class: "link", type: "button", "aria-label": `Remove ${f.file.name}`,
+            onclick: () => { URL.revokeObjectURL(f.url); state.films.splice(i, 1); drawList(); } }, "Remove"));
+      }));
+    };
+    const add = (files) => {
       const max = (cfg.MAX_UPLOAD_MB || 50) * 1e6;
-      for (const file of input.files) {
-        if (file.size > max) toast(`${file.name} is over ${cfg.MAX_UPLOAD_MB} MB: share it as a link below instead`);
-        else state.films.push({ file });
+      let added = 0; const tooBig = [];
+      for (const file of files) {
+        if (!file.type.startsWith("video/") && !/\.(mp4|mov|m4v|avi|mkv|webm)$/i.test(file.name)) { toast(`${file.name} isn't a video file`); continue; }
+        if (file.size > max) { tooBig.push(file); continue; }
+        if (state.films.some((f) => f.file.name === file.name && f.file.size === file.size)) continue;
+        state.films.push({ file }); added++;
       }
-      input.value = ""; drawList();
-    });
+      if (added) toast(`${added} video${added > 1 ? "s" : ""} added`);
+      drawList();
+      warn.replaceChildren(...tooBig.map((f) => h("p", { class: "small", style: "margin:0;color:var(--warn,#FFB547)" },
+        `${f.name} is ${fmtSize(f.size)}, over the ${cfg.MAX_UPLOAD_MB} MB upload limit. Share it with a Google Drive, Dropbox or Hudl link below instead.`)));
+    };
+    input.addEventListener("change", () => { add(input.files); input.value = ""; });
     const links = h("div", { class: "stack", style: "gap:8px" });
     const drawLinks = () => links.replaceChildren(...state.links.map((l, i) => h("input", { value: l, "aria-label": `Film link ${i + 1}`, placeholder: "https://hudl.com/…  or a Google Drive / Dropbox / GameChanger link",
       oninput: (e) => (state.links[i] = e.target.value) })),
       h("button", { class: "link", type: "button", onclick: () => { state.links.push(""); drawLinks(); } }, "+ Add another link"));
     drawLinks(); drawList();
+    const filmDrop = h("label", { class: "drop", for: "film" }, input, h("span", { class: "h-md" }, "Choose or drop videos"),
+      h("span", { class: "small muted" }, `Phone videos, screen recordings, exported clips. Up to ${cfg.MAX_UPLOAD_MB} MB each; bigger files go by link.`));
+    filmDrop.addEventListener("dragover", (e) => { e.preventDefault(); filmDrop.classList.add("over"); });
+    filmDrop.addEventListener("dragleave", () => filmDrop.classList.remove("over"));
+    filmDrop.addEventListener("drop", (e) => { e.preventDefault(); filmDrop.classList.remove("over"); add(e.dataTransfer.files); });
     const notes = h("textarea", { id: "notes", placeholder: "e.g. Wearing #7 in white. Best plays: the long TD in the 4th quarter, the diving catch in game 2…" });
     notes.value = state.notes; notes.addEventListener("input", () => (state.notes = notes.value));
     return h("div", { class: "stack" },
       h("div", { class: "card stack" }, h("h2", { class: "h-md" }, "Upload video files"),
-        h("label", { class: "drop", for: "film" }, input, h("span", { class: "h-md" }, "Choose videos"),
-          h("span", { class: "small muted" }, `Phone videos, screen recordings, exported clips. Up to ${cfg.MAX_UPLOAD_MB} MB each; bigger files go by link.`)),
-        list),
+        filmDrop,
+        warn, summary, list),
       h("div", { class: "card stack" }, h("h2", { class: "h-md" }, "Or share links"),
         h("p", { class: "small muted", style: "margin:0" }, "Full games from Hudl or GameChanger, or a shared Google Drive / Dropbox folder. Make sure the link is viewable by anyone with it."),
         links),

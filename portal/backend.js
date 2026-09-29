@@ -86,7 +86,16 @@
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
       });
       this.listeners = new Set();
-      this.sb.auth.onAuthStateChange(() => { this._me = undefined; this.listeners.forEach((f) => f()); });
+      // Supabase fires auth events on tab focus and token refresh too (SIGNED_IN / TOKEN_REFRESHED for the
+      // same user). Only re-render when who is signed in actually changes, so half-filled forms survive.
+      this._uid = null;
+      this.sb.auth.onAuthStateChange((event, session) => {
+        const uid = session?.user?.id || null;
+        if (uid === this._uid && event !== "SIGNED_OUT") return;
+        this._uid = uid;
+        this._me = undefined;
+        this.listeners.forEach((f) => f());
+      });
     }
     onChange(f) { this.listeners.add(f); return () => this.listeners.delete(f); }
     async session() {
