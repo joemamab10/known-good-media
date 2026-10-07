@@ -205,3 +205,6 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 @media (max-width: 900px) {
   .section-alt.why { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* "Your reel here" sits on its own row under the three reels */
+.work-card.work-cta { grid-column: 1 / -1; min-height: 110px; }
