@@ -19,6 +19,9 @@ window.KGM_CONFIG = {
       includes: ["Everything in Known", "Vertical cut for Instagram/TikTok", "Recruiting graphic", "2 revisions"], pay: "https://buy.stripe.com/7sY6oA7SR6Sd7FYfMa5AQ05", pay_rush: "https://buy.stripe.com/9B69AM2yx7Wh3pIdE25AQ09" },
     { id: "household-name", name: "Household Name", price: 500, plays: "Full season",
       includes: ["We film 4 games", "Mid + end-of-season reels", "Social cuts all season"], pay: "https://buy.stripe.com/28E00c3CBa4paSa6bA5AQ04", pay_rush: "https://buy.stripe.com/eVq8wIgpn3G19O68jI5AQ08" },
+    // Youth line (younger athletes): a keepsake, not a recruiting tool. Paste its Stripe links when you make them.
+    { id: "rookie", line: "youth", name: "Rookie", price: 100, plays: "About a 60-second season highlight",
+      includes: ["Fun player card with photo and number", "Trading card graphic", "Music", "No stats or contact info shown"], pay: "", pay_rush: "" },
   ],
   RUSH: { price: 35, label: "Rush delivery (48 hours)" },
 

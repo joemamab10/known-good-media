@@ -208,3 +208,11 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 
 /* "Your reel here" sits on its own row under the three reels */
 .work-card.work-cta { grid-column: 1 / -1; min-height: 110px; }
+
+/* Youth line, under the recruiting packages */
+.youth { margin-top: clamp(56px, 7vw, 88px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); text-align: center; scroll-margin-top: 80px; }
+.youth .eyebrow { margin-bottom: 8px; }
+.youth-title { margin: 0 0 12px; font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(34px, 4.5vw, 54px); line-height: 1; letter-spacing: 0.02em; }
+.youth .section-sub { margin-bottom: 0; }
+.youth-packages { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin-left: auto; margin-right: auto; text-align: left; }
+@media (max-width: 720px) { .youth-packages { grid-template-columns: minmax(0, 1fr); } }

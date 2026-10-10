@@ -378,11 +378,16 @@
 
   function packageStep(state) {
     const opts = h("div", { class: "pick", role: "group", "aria-label": "Package" });
-    const drawOpts = () => opts.replaceChildren(...cfg.PACKAGES.map((p) => h("button", { class: "choice", type: "button", "aria-pressed": String(state.package === p.id),
+    const card = (p) => h("button", { class: "choice", type: "button", "aria-pressed": String(state.package === p.id),
       onclick: () => { state.package = p.id; drawOpts(); } },
       p.featured ? h("span", { class: "badge" }, "Most popular") : null,
       h("span", { class: "name" }, p.name), h("span", { class: "price" }, money(p.price)),
-      h("span", { class: "small muted" }, p.plays), h("ul", {}, p.includes.map((x) => h("li", {}, x))))));
+      h("span", { class: "small muted" }, p.plays), h("ul", {}, p.includes.map((x) => h("li", {}, x))));
+    const recruiting = cfg.PACKAGES.filter((p) => p.line !== "youth"), youth = cfg.PACKAGES.filter((p) => p.line === "youth");
+    const drawOpts = () => opts.replaceChildren(
+      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:0" }, "Recruiting reels")] : []),
+      ...recruiting.map(card),
+      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:14px 0 0" }, "Youth"), ...youth.map(card)] : []));
     drawOpts();
     const rush = h("input", { type: "checkbox", id: "rush", style: "width:22px;min-height:22px" });
     rush.checked = state.rush; rush.addEventListener("change", () => (state.rush = rush.checked));
