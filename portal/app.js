@@ -446,6 +446,7 @@
       const pay = (state.rush && pkgP?.pay_rush) || pkgP?.pay;
       if (pay && B.mode !== "demo") {
         await B.updateOrder(order.id, { payment_started: true }).catch(() => {});
+        rememberPay(order.id);
         const u = new URL(pay);
         u.searchParams.set("client_reference_id", order.id);
         u.searchParams.set("prefilled_email", (await B.session()).email);
@@ -479,7 +480,7 @@
       const pay = (o.rush && p?.pay_rush) || p?.pay;
       act.append(h("div", { class: "callout" }, h("p", { style: "margin:0 0 10px" }, h("strong", {}, "Payment needed. "), "We start as soon as it's in."),
         o.rush && !p?.pay_rush ? h("p", { class: "small", style: "margin:0 0 10px" }, h("strong", {}, "Rush order: "), `on the payment page, tap Add next to ${cfg.RUSH.label} so the total is ${money(o.price)}.`) : null,
-        pay && B.mode !== "demo" ? h("a", { class: "btn", href: `${pay}?client_reference_id=${encodeURIComponent(o.id)}` }, `Pay ${money(o.price)}`)
+        pay && B.mode !== "demo" ? h("a", { class: "btn", href: `${pay}?client_reference_id=${encodeURIComponent(o.id)}`, onclick: () => rememberPay(o.id) }, `Pay ${money(o.price)}`)
           : h("p", { class: "small muted", style: "margin:0" }, B.mode === "demo" ? "Demo mode: payment is skipped." : `Questions? Email ${cfg.CONTACT_EMAIL}.`)));
     }
     if (o.status === "review" && !admin) {
@@ -622,6 +623,19 @@
   }
 
   // ---------- router ----------
+  // ---------- back from Stripe ----------
+  // Payment Links redirect to /portal/?paid=1. Remember which order is being paid so the parent lands on it.
+  function rememberPay(id) { try { localStorage.setItem("kgm-paying", id); } catch (e) {} }
+  let paidNotice = false;
+  (function () {
+    const q = new URLSearchParams(location.search);
+    if (q.get("paid") !== "1") return;
+    paidNotice = true;
+    let id = null;
+    try { id = localStorage.getItem("kgm-paying"); localStorage.removeItem("kgm-paying"); } catch (e) {}
+    history.replaceState(null, "", location.pathname + (id ? "#/order/" + id : location.hash));
+  })();
+
   let rendering = 0;
   async function render() {
     const my = ++rendering;
@@ -639,6 +653,11 @@
     } catch (e) {
       console.error(e);
       view = h("div", { class: "empty" }, "Something went wrong loading this page. ", h("button", { class: "link", onclick: render }, "Try again"));
+    }
+    if (paidNotice && me && view) {
+      paidNotice = false;
+      view.prepend(h("div", { class: "callout", role: "status" }, h("strong", {}, "Payment received. Thank you! "),
+        "We're getting started on the reel. It can take a minute for the order to show as paid."));
     }
     if (my === rendering) $app.replaceChildren(view);
   }
