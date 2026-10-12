@@ -75,7 +75,13 @@
         const r = await B.signIn(v);
         if (r.sent) msg.textContent = `We emailed a sign-in link to ${v}. Open it on this device to continue.`;
         else render();
-      } catch (err) { msg.textContent = err.message || "Couldn't send the link. Try again."; }
+      } catch (err) {
+        const m = String((err && err.message) || "");
+        msg.textContent = /rate limit|too many|429/i.test(m) || (err && err.status === 429)
+          ? `Too many sign-in emails right now. Please try again in a few minutes, or email ${cfg.CONTACT_EMAIL} and we'll help.`
+          : /invalid|email address/i.test(m) ? "That email address doesn't look right. Check it and try again."
+          : "Couldn't send the sign-in link. Try again in a minute.";
+      }
       form.querySelector("button").disabled = false;
     } },
       h("label", { class: "f", for: "email" }, "Parent email", email),
