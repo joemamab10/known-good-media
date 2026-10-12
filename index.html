@@ -16,39 +16,25 @@
   <meta property="og:image" content="https://knowngoodmedia.com/brand/png/logo-card-dark-1200.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@knowngoodmedia">
-  <link rel="stylesheet" href="assets/css/styles.css?v=9">
+  <link rel="stylesheet" href="assets/css/styles.css?v=10">
 </head>
 <body>
 
 <header class="nav">
   <a class="nav-logo" href="#top" aria-label="Known Good Media home">
-    <img src="brand/logo-on-dark.svg" alt="Known Good Media" width="150">
+    <img src="brand/logo-nav.svg" alt="Known Good Media" width="130" height="58">
   </a>
   <nav aria-label="Main">
-    <a href="#why">Our why</a>
+    <a class="nav-extra" href="#why">Our why</a>
     <a href="#packages">Packages</a>
     <a href="#youth">Youth</a>
-    <a href="#how">How it works</a>
+    <a class="nav-extra" href="#how">How it works</a>
     <a href="#work">Our work</a>
     <a class="btn btn-ghost btn-small" href="portal/">Parent login</a>
     <a class="btn btn-small" href="portal/#/new">Book a reel</a>
   </nav>
 </header>
 
-<div class="paid-banner" id="paidBanner" hidden role="status">
-  <strong>Payment received. Thank you!</strong>
-  <span>We're getting started on your reel. We'll let you know when your first draft is ready. You can check progress any time in the <a href="portal/">parent portal</a>.</span>
-  <button type="button" aria-label="Close" onclick="this.parentElement.hidden=true">&times;</button>
-</div>
-<script>
-  (function () {
-    var q = new URLSearchParams(location.search);
-    if (q.get('paid') === '1') {
-      document.getElementById('paidBanner').hidden = false;
-      history.replaceState(null, '', location.pathname + location.hash);
-    }
-  })();
-</script>
 <main id="top">
 
   <section class="hero">

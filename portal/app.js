@@ -61,6 +61,8 @@
 
   // ---------- sign in ----------
   function signInView() {
+    const [, r0, pid] = (location.hash || "#/").split("/");
+    const picked = r0 === "new" && pid ? pkgOf(pid) : null;
     const email = h("input", { type: "email", id: "email", autocomplete: "email", placeholder: "you@example.com", required: true });
     const msg = h("p", { class: "small muted", "aria-live": "polite" });
     const form = h("form", { class: "stack", onsubmit: async (e) => {
@@ -69,6 +71,7 @@
       if (!/^\S+@\S+\.\S+$/.test(v)) { msg.textContent = "Enter the email address you'd like updates sent to."; return; }
       form.querySelector("button").disabled = true;
       try {
+        rememberNext();
         const r = await B.signIn(v);
         if (r.sent) msg.textContent = `We emailed a sign-in link to ${v}. Open it on this device to continue.`;
         else render();
@@ -82,6 +85,7 @@
       h("p", { class: "eyebrow" }, "Known Good Media"),
       h("h1", { class: "h-xl" }, "Get your athlete known."),
       h("p", { class: "muted" }, "Order a highlight reel, upload film and a player photo, and follow along until it's ready. No password: we email you a link to sign in."),
+      picked ? h("p", { class: "callout good" }, h("strong", {}, `${picked.name} ($${picked.price}). `), "Sign in and we'll take you straight to your order.") : null,
       h("div", { class: "card" }, form),
       B.mode === "demo" ? h("p", { class: "small muted" }, "Demo tip: sign in with an email containing \"admin\" to see the owner's order screen.") : null);
   }
@@ -626,6 +630,19 @@
   // ---------- back from Stripe ----------
   // Payment Links redirect to /portal/?paid=1. Remember which order is being paid so the parent lands on it.
   function rememberPay(id) { try { localStorage.setItem("kgm-paying", id); } catch (e) {} }
+  // The sign-in email link returns to /portal/ without the #/new/<package> part, so keep it here.
+  function rememberNext() {
+    const hsh = location.hash || "";
+    try { if (/^#\/(new|order|athlete)\b/.test(hsh)) localStorage.setItem("kgm-next", JSON.stringify({ hash: hsh, at: Date.now() })); } catch (e) {}
+  }
+  function takeNext() {
+    try {
+      const raw = localStorage.getItem("kgm-next"); if (!raw) return null;
+      localStorage.removeItem("kgm-next");
+      const n = JSON.parse(raw);
+      return n && n.hash && Date.now() - n.at < 24 * 3600 * 1000 ? n.hash : null;
+    } catch (e) { return null; }
+  }
   let paidNotice = false;
   (function () {
     const q = new URLSearchParams(location.search);
@@ -640,6 +657,13 @@
   async function render() {
     const my = ++rendering;
     const me = await B.session();
+    if (me) {
+      const next = takeNext();
+      const here = location.hash || "";
+      if (next && next !== here && !/^#\/(new|order|athlete|admin)\b/.test(here)) {
+        history.replaceState(null, "", location.pathname + next);
+      }
+    }
     await chrome(me);
     const [, route, id] = (location.hash || "#/").split("/");
     let view;
