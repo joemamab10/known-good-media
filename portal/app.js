@@ -260,7 +260,7 @@
   const STEP_NAMES = ["Athlete", "Photo", "Film", "Package", "Review"];
   async function wizard(me, pkg) {
     const athletes = (await B.listAthletes()).filter((a) => a.parent_id === me.id);
-    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) && !pkgOf(pkg).hidden ? pkg : "well-known", rush: false, photo_url: null };
+    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", heard: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) && !pkgOf(pkg).hidden ? pkg : "well-known", rush: false, photo_url: null };
     const root = h("section", { class: "stack" });
     let form;
     const draw = async () => {
@@ -407,10 +407,14 @@
     color.addEventListener("input", () => (state.team_color = color.value));
     const music = h("input", { id: "music", value: state.music, placeholder: "e.g. hype hip-hop, rock, no lyrics" });
     music.addEventListener("input", () => (state.music = music.value));
+    const heard = h("select", { id: "heard" }, ...["", "A friend or family", "A coach or team", "Instagram", "TikTok", "X", "Google search", "At a game or event", "Other"]
+      .map((x) => h("option", { value: x }, x || "Choose…")));
+    heard.value = state.heard; heard.addEventListener("change", () => (state.heard = heard.value));
     return h("div", { class: "stack" }, opts, rushRow,
       h("div", { class: "grid" },
         h("label", { class: "f", for: "color" }, "Team color", color, h("span", { class: "hint" }, "We brand the reel in your team's color.")),
-        h("label", { class: "f", for: "music" }, "Music vibe", music, h("span", { class: "hint" }, "We use licensed music so the reel won't get muted on social."))));
+        h("label", { class: "f", for: "music" }, "Music vibe", music, h("span", { class: "hint" }, "We use licensed music so the reel won't get muted on social.")),
+        h("label", { class: "f", for: "heard" }, "How did you hear about us?", heard, h("span", { class: "hint" }, "Optional. It helps us know what's working."))));
   }
 
   function total(state) { return (pkgOf(state.package)?.price || 0) + (state.rush && !pkgOf(state.package)?.no_rush ? cfg.RUSH.price : 0); }
@@ -441,7 +445,7 @@
     try {
       const order = await B.createOrder({
         athlete_id: a.id, athlete: { ...a, photo_url: undefined }, package: state.package, price: total(state), rush: state.rush,
-        film_links: state.links.map((l) => l.trim()).filter(Boolean), notes: state.notes || null, music: state.music || null, team_color: state.team_color,
+        film_links: state.links.map((l) => l.trim()).filter(Boolean), notes: [state.heard ? `Heard about us: ${state.heard}` : "", state.notes].filter(Boolean).join("\n") || null, music: state.music || null, team_color: state.team_color,
       });
       if (state.films.length) {
         const box = h("div", { class: "list" });
