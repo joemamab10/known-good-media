@@ -62,7 +62,7 @@
   // ---------- sign in ----------
   function signInView() {
     const [, r0, pid] = (location.hash || "#/").split("/");
-    const picked = r0 === "new" && pid ? pkgOf(pid) : null;
+    const picked = r0 === "new" && pid && pkgOf(pid) && !pkgOf(pid).hidden ? pkgOf(pid) : null;
     const email = h("input", { type: "email", id: "email", autocomplete: "email", placeholder: "you@example.com", required: true });
     const msg = h("p", { class: "small muted", "aria-live": "polite" });
     const form = h("form", { class: "stack", onsubmit: async (e) => {
@@ -260,7 +260,7 @@
   const STEP_NAMES = ["Athlete", "Photo", "Film", "Package", "Review"];
   async function wizard(me, pkg) {
     const athletes = (await B.listAthletes()).filter((a) => a.parent_id === me.id);
-    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) ? pkg : "well-known", rush: false, photo_url: null };
+    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) && !pkgOf(pkg).hidden ? pkg : "well-known", rush: false, photo_url: null };
     const root = h("section", { class: "stack" });
     let form;
     const draw = async () => {
@@ -387,27 +387,33 @@
       p.featured ? h("span", { class: "badge" }, "Most popular") : null,
       h("span", { class: "name" }, p.name), h("span", { class: "price" }, money(p.price)),
       h("span", { class: "small muted" }, p.plays), h("ul", {}, p.includes.map((x) => h("li", {}, x))));
-    const recruiting = cfg.PACKAGES.filter((p) => p.line !== "youth"), youth = cfg.PACKAGES.filter((p) => p.line === "youth");
-    const drawOpts = () => opts.replaceChildren(
-      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:0" }, "Recruiting reels")] : []),
-      ...recruiting.map(card),
-      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:14px 0 0" }, "Youth"), ...youth.map(card)] : []));
-    drawOpts();
+    const shown = cfg.PACKAGES.filter((p) => !p.hidden);
+    const recruiting = shown.filter((p) => p.line !== "youth"), youth = shown.filter((p) => p.line === "youth");
     const rush = h("input", { type: "checkbox", id: "rush", style: "width:22px;min-height:22px" });
     rush.checked = state.rush; rush.addEventListener("change", () => (state.rush = rush.checked));
+    const rushRow = h("label", { class: "row card tight", for: "rush", style: "cursor:pointer" }, rush,
+      h("span", {}, h("strong", {}, cfg.RUSH.label), " ", h("span", { class: "muted" }, "+" + money(cfg.RUSH.price))));
+    const syncRush = () => {
+      const off = !!pkgOf(state.package)?.no_rush;  // full-season package: no rush option
+      rushRow.hidden = off;
+      if (off) { state.rush = false; rush.checked = false; }
+    };
+    const drawOpts = () => { syncRush(); opts.replaceChildren(
+      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:0" }, "Recruiting reels")] : []),
+      ...recruiting.map(card),
+      ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:14px 0 0" }, "Youth"), ...youth.map(card)] : [])); };
+    drawOpts();
     const color = h("input", { type: "color", id: "color", value: state.team_color, style: "height:44px;padding:4px" });
     color.addEventListener("input", () => (state.team_color = color.value));
     const music = h("input", { id: "music", value: state.music, placeholder: "e.g. hype hip-hop, rock, no lyrics" });
     music.addEventListener("input", () => (state.music = music.value));
-    return h("div", { class: "stack" }, opts,
-      h("label", { class: "row card tight", for: "rush", style: "cursor:pointer" }, rush,
-        h("span", {}, h("strong", {}, cfg.RUSH.label), " ", h("span", { class: "muted" }, "+" + money(cfg.RUSH.price)))),
+    return h("div", { class: "stack" }, opts, rushRow,
       h("div", { class: "grid" },
         h("label", { class: "f", for: "color" }, "Team color", color, h("span", { class: "hint" }, "We brand the reel in your team's color.")),
         h("label", { class: "f", for: "music" }, "Music vibe", music, h("span", { class: "hint" }, "We use licensed music so the reel won't get muted on social."))));
   }
 
-  function total(state) { return (pkgOf(state.package)?.price || 0) + (state.rush ? cfg.RUSH.price : 0); }
+  function total(state) { return (pkgOf(state.package)?.price || 0) + (state.rush && !pkgOf(state.package)?.no_rush ? cfg.RUSH.price : 0); }
 
   function reviewStep(state) {
     const a = state.athlete, p = pkgOf(state.package);

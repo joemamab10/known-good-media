@@ -16,7 +16,7 @@
   <meta property="og:image" content="https://knowngoodmedia.com/brand/png/logo-card-dark-1200.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@knowngoodmedia">
-  <link rel="stylesheet" href="assets/css/styles.css?v=10">
+  <link rel="stylesheet" href="assets/css/styles.css?v=13">
 </head>
 <body>
 
@@ -25,11 +25,12 @@
     <img src="brand/logo-nav.svg" alt="Known Good Media" width="130" height="58">
   </a>
   <nav aria-label="Main">
+    <a href="#work">Our work</a>
     <a class="nav-extra" href="#why">Our why</a>
     <a href="#packages">Packages</a>
     <a href="#youth">Youth</a>
     <a class="nav-extra" href="#how">How it works</a>
-    <a href="#work">Our work</a>
+    <a href="#faq">FAQ</a>
     <a class="btn btn-ghost btn-small" href="portal/">Parent login</a>
     <a class="btn btn-small" href="portal/#/new">Book a reel</a>
   </nav>
@@ -38,20 +39,48 @@
 <main id="top">
 
   <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/img/hero-poster.jpg?v=2" aria-hidden="true" tabindex="-1">
+      <source src="assets/video/hero-loop.mp4?v=2" type="video/mp4">
+    </video>
     <p class="eyebrow">Every sport · Recruiting video</p>
     <h1 class="hero-title"><span>K</span><span class="accent">NOW</span><span>N</span></h1>
-    <p class="hero-sub">Highlight reels built for the coach's first 60 seconds. Your best plays up front, clear player ID, and all the hype, without hiding the film.</p>
+    <p class="hero-sub">Highlight reels that get noticed fast. Your best plays first, clear player ID, and all the hype, without hiding the film.</p>
     <div class="hero-cta">
       <a class="btn" href="portal/#/new">Get known</a>
       <a class="btn btn-ghost" href="#packages">See packages</a>
     </div>
   </section>
+  <script>
+    // Respect "reduce motion": show the still image instead of the moving loop.
+    (function () { var v = document.querySelector('.hero-video');
+      if (v && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.pause(); } })();
+  </script>
 
   <section class="band">
     <div class="band-item"><strong>Best plays first</strong><span>Coaches decide fast. We lead with your top clips.</span></div>
     <div class="band-item"><strong>Clear player ID</strong><span>We mark you at the start of each play, so no coach has to guess.</span></div>
     <div class="band-item"><strong>Player card up front</strong><span>Your photo, grad year, measurables and GPA before the first play.</span></div>
-    <div class="band-item"><strong>Ready to post</strong><span>Sized for X, Instagram, Hudl and email to coaches.</span></div>
+    <div class="band-item"><strong>Ready to post</strong><span>A wide cut for coaches, Hudl and email, plus a vertical cut for Instagram, TikTok and X.</span></div>
+  </section>
+
+  <section id="work" class="section">
+    <h2 class="section-title"><span class="accent">Now</span> known</h2>
+    <p class="section-sub">Recent reels from our athletes.</p>
+    <div class="work-grid">
+      <figure class="work-card work-video">
+        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GEwlCEUNE8o?rel=0&amp;modestbranding=1" title="Max Bejarno, 1B/3B, Class of 2029: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <figcaption>Max Bejarno · Baseball · 1B/3B · Class of 2029</figcaption>
+      </figure>
+      <figure class="work-card work-video">
+        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/KQTa3pvRxlU?rel=0&amp;modestbranding=1" title="Landry Hall, CF, Class of 2032: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <figcaption>Landry Hall · Baseball · CF · Class of 2032</figcaption>
+      </figure>
+      <figure class="work-card work-video">
+        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/niFUxguE9Ok?rel=0&amp;modestbranding=1" title="Grady Bejarno, RB/DE, Class of 2032: football highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <figcaption>Grady Bejarno · Football · RB/DE · Class of 2032</figcaption>
+      </figure>
+      <a class="work-card work-cta" href="portal/#/new"><span>Your reel here · Get known</span></a>
+    </div>
   </section>
 
   <section id="why" class="section section-alt why">
@@ -66,7 +95,7 @@
     <ul class="why-points">
       <li><h3>Seen, not guessed</h3><p>Coaches give a reel about a minute. We put your best plays first and mark you on every one, so they never have to hunt for you.</p></li>
       <li><h3>Known good</h3><p>"Known good" means tested and trusted. Real plays, clearly marked, no tricks. Coaches trust film that speaks for itself.</p></li>
-      <li><h3>Within reach</h3><p>A great reel shouldn't cost what a recruiting service does. Packages start at $75, so every family can get in the game.</p></li>
+      <li><h3>Within reach</h3><p>A great reel shouldn't cost what a recruiting service does. Recruiting reels start at $150 and youth reels at $100, so every family can get in the game.</p></li>
     </ul>
   </section>
 
@@ -74,25 +103,14 @@
     <h2 class="section-title">From unknown to <span class="accent">known</span></h2>
     <div class="packages">
       <article class="pkg">
-        <h3>Unknown</h3>
-        <p class="price">$75</p>
-        <p class="pkg-desc">A clean starter highlight cut.</p>
-        <ul>
-          <li>Up to 8 plays from your film</li>
-          <li>Player ID on every play</li>
-          <li>Player card with your photo and GPA</li>
-          <li>Delivered in 5 days</li>
-        </ul>
-        <a class="btn btn-ghost" href="portal/#/new/unknown" aria-label="Choose Unknown">Get started</a>
-      </article>
-      <article class="pkg">
         <h3>Known</h3>
         <p class="price">$150</p>
         <p class="pkg-desc">The full hype reel.</p>
         <ul>
-          <li>Everything in Unknown, up to 15 plays</li>
-          <li>Hype intro, music and smart zoom</li>
-          <li>Slow-mo replays and play labels</li>
+          <li>Up to 15 plays</li>
+          <li>Player card, player ID on every play, music</li>
+          <li>Wide cut for coaches, vertical cut for social</li>
+          <li>Slow-mo replays, play labels and team colors</li>
           <li>One round of changes</li>
         </ul>
         <a class="btn btn-ghost" href="portal/#/new/known" aria-label="Choose Known">Get started</a>
@@ -101,10 +119,9 @@
         <p class="pkg-tag">Most popular</p>
         <h3>Well-Known</h3>
         <p class="price">$250</p>
-        <p class="pkg-desc">Reel plus a social rollout.</p>
+        <p class="pkg-desc">Reel plus a recruiting kit.</p>
         <ul>
           <li>Everything in Known, up to 25 plays</li>
-          <li>Vertical cut for Instagram, TikTok and X</li>
           <li>Recruiting profile graphic</li>
           <li>Two rounds of changes</li>
         </ul>
@@ -119,9 +136,14 @@
           <li>We film 4 of your games</li>
           <li>Mid-season and end-of-season reels</li>
           <li>Commitment and offer graphics</li>
+          <li>Three rounds of changes per reel</li>
         </ul>
         <a class="btn btn-ghost" href="portal/#/new/household-name" aria-label="Choose Household Name">Get started</a>
       </article>
+    </div>
+    <div class="pkg-notes">
+      <p><strong>Delivery:</strong> most reels are ready within 5 days of getting your film. Need it fast? Add rush delivery: 48 hours for $35.</p>
+      <p><strong>Our promise:</strong> if the first draft isn't right, we fix it. If it's still not right, you get your money back.</p>
     </div>
 
     <div id="youth" class="youth">
@@ -134,9 +156,10 @@
           <p class="price">$100</p>
           <p class="pkg-desc">Their season, made to keep.</p>
           <ul>
-            <li>About a 60-second season highlight</li>
+            <li>A highlight reel of their season</li>
             <li>Fun player card with photo and number</li>
             <li>Trading card graphic</li>
+            <li>Music, wide and vertical cuts</li>
             <li>No stats or contact info on screen</li>
           </ul>
           <a class="btn btn-ghost" href="portal/#/new/rookie" aria-label="Choose Rookie">Get started</a>
@@ -166,23 +189,43 @@
     </ol>
   </section>
 
-  <section id="work" class="section">
-    <h2 class="section-title"><span class="accent">Now</span> known</h2>
-    <p class="section-sub">Recent reels from our athletes.</p>
-    <div class="work-grid">
-      <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GEwlCEUNE8o?rel=0&amp;modestbranding=1" title="Max Bejarno, 1B/3B, Class of 2029: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-        <figcaption>Max Bejarno · Baseball · 1B/3B · Class of 2029</figcaption>
-      </figure>
-      <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/KQTa3pvRxlU?rel=0&amp;modestbranding=1" title="Landry Hall, CF, Class of 2032: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-        <figcaption>Landry Hall · Baseball · CF · Class of 2032</figcaption>
-      </figure>
-      <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/niFUxguE9Ok?rel=0&amp;modestbranding=1" title="Grady Bejarno, RB/DE, Class of 2032: football highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-        <figcaption>Grady Bejarno · Football · RB/DE · Class of 2032</figcaption>
-      </figure>
-      <a class="work-card work-cta" href="portal/#/new"><span>Your reel here · Get known</span></a>
+
+  <section id="faq" class="section faq">
+    <h2 class="section-title">Questions</h2>
+    <p class="section-sub">The things parents ask us most.</p>
+    <div class="faq-list">
+      <details>
+        <summary>What kind of film works?</summary>
+        <p>Any game film: Hudl, GameChanger, phone video, or a Google Drive or Dropbox link. Steady and close is best, but we work with what you have. Full games are fine. Just tell us the plays you want us to find and what your athlete is wearing.</p>
+      </details>
+      <details>
+        <summary>How long does it take?</summary>
+        <p>Most reels are ready within 5 days of getting your film. Need it faster? Add rush delivery when you order: 48 hours for $35. Household Name runs all season, with a mid-season and an end-of-season reel.</p>
+      </details>
+      <details>
+        <summary>Which package should I pick?</summary>
+        <p>Known is a full hype reel to send to coaches. Well-Known adds more plays, a recruiting profile graphic and an extra round of changes, and it's what most families choose. Household Name is for families who want us filming at games all season.</p>
+      </details>
+      <details>
+        <summary>Recruiting reel or youth reel?</summary>
+        <p>Recruiting reels are built for coaches: measurables, GPA and contact info up front. Youth reels are a keepsake for younger athletes, with a fun player card and a trading card, and no stats or contact info on screen.</p>
+      </details>
+      <details>
+        <summary>Can I ask for changes?</summary>
+        <p>Yes. Known includes one round of changes, Well-Known two, and Household Name three per reel. If something is our mistake, we fix it for free, every time.</p>
+      </details>
+      <details>
+        <summary>What if we're not happy with it?</summary>
+        <p>If the first draft isn't right, we fix it. If it's still not right, you get your money back.</p>
+      </details>
+      <details>
+        <summary>Who sees my athlete's reel?</summary>
+        <p>You do, first. We never post a reel without your OK, and you decide where it goes. Your film and photos are only used to make your reel.</p>
+      </details>
+      <details>
+        <summary>How do I pay?</summary>
+        <p>When you place your order in the parent portal, you pay securely through Stripe with a card, Apple Pay or Google Pay.</p>
+      </details>
     </div>
   </section>
 
@@ -207,6 +250,7 @@
     <a href="https://youtube.com/@knowngoodmedia">YouTube</a>
     <a href="https://x.com/knowngoodmedia">X</a>
     <a href="mailto:joe@knowngoodmedia.com">Email</a>
+    <a href="#faq">FAQ</a>
     <a href="portal/">Parent login</a>
   </p>
 </footer>
