@@ -149,3 +149,5 @@ create policy "admin deliveries" on storage.objects for insert
 -- update public.profiles set is_admin = true where email = 'YOUR EMAIL';
 
 -- Stripe auto-paid: run supabase/stripe-webhook.sql after this file (it updates guard_order and adds paid_amount/stripe_session).
+
+-- Then run supabase/advisor-fixes.sql (indexes, faster access rules, and is_admin moved to a private schema).
