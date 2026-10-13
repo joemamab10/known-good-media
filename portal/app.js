@@ -87,10 +87,16 @@
       h("label", { class: "f", for: "email" }, "Parent email", email),
       h("button", { class: "btn", type: "submit" }, B.mode === "demo" ? "Enter the demo" : "Email me a sign-in link"),
       msg);
+    const ordering = r0 === "new";
     return h("section", { class: "stack", style: "max-width:520px;margin:6vh auto 0" },
-      h("p", { class: "eyebrow" }, "Known Good Media"),
-      h("h1", { class: "h-xl" }, "Get your athlete known."),
-      h("p", { class: "muted" }, "Order a highlight reel, upload film and a player photo, and follow along until it's ready. No password: we email you a link to sign in."),
+      h("p", { class: "eyebrow" }, ordering ? "Order a reel" : "My orders"),
+      h("h1", { class: "h-xl" }, ordering ? "Get your athlete known." : "Welcome back."),
+      h("p", { class: "muted" }, ordering
+        ? "Start with your email. We'll send a sign-in link (no password), then you'll pick a package, upload film and a player photo, and pay."
+        : "Enter the email you ordered with and we'll send a sign-in link (no password) to check your reel's progress, add film or download it."),
+      h("p", { class: "small muted" }, ordering
+        ? h("span", {}, "Already ordered? ", h("a", { href: "#/" }, "Go to my orders"), ".")
+        : h("span", {}, "New here? ", h("a", { href: "#/new" }, "Order a reel"), " instead. Same sign-in, no account to set up.")),
       picked ? h("p", { class: "callout good" }, h("strong", {}, `${picked.name} ($${picked.price}). `), "Sign in and we'll take you straight to your order.") : null,
       h("div", { class: "card" }, form),
       B.mode === "demo" ? h("p", { class: "small muted" }, "Demo tip: sign in with an email containing \"admin\" to see the owner's order screen.") : null);

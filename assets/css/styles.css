@@ -52,6 +52,7 @@ img { max-width: 100%; height: auto; display: block; }
   text-transform: uppercase; text-decoration: none; color: var(--white);
 }
 .nav nav a:not(.btn):hover { color: var(--blue); }
+.nav nav a.nav-account { opacity: .8; }
 
 /* Buttons */
 .btn {
@@ -185,6 +186,7 @@ main [id] { scroll-margin-top: 100px; }
 }
 @media (max-width: 720px) {
   .nav nav a:not(.btn) { display: none; }
+  .nav nav a.nav-account { display: inline; font-size: 13px; color: var(--muted, #A9B0BB); }
   .nav nav { gap: 10px; }
   .nav .btn-small { min-height: 40px; padding: 0 12px; font-size: 14px; letter-spacing: 0.08em; }
   .nav-logo img { width: 100px; height: auto; }
