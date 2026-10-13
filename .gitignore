@@ -1,0 +1,5 @@
+# Personal files that should never be on the public site
+Receipt*.pdf
+*receipt*.pdf
+*invoice*.pdf
+.DS_Store
