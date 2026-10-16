@@ -157,6 +157,7 @@
       f("grad_year", "Grad year", { ph: "e.g. 2028", inputmode: "numeric" }),
       f("number", "Jersey #", { ph: "e.g. 7", inputmode: "numeric" }),
       f("school", "School or team", { full: true, ph: "High school or club team" }),
+      f("mascot", "Team nickname", { full: true, ph: "e.g. Maroons, Mustangs, Lions", hint: "Shown big on the player card in your team color." }),
       f("height", "Height", { ph: "e.g. 5'10\"" }),
       f("weight", "Weight", { ph: "e.g. 165 lbs" }),
       f("gpa", "GPA", { ph: "e.g. 3.5", hint: "Coaches filter on academics first. It gets highlighted on the card." }),
@@ -181,7 +182,7 @@
     grid.read = () => {
       const val = (k) => grid.querySelector("#a_" + k).value.trim();
       const out = { ...a };
-      for (const k of ["name", "sport", "position", "number", "school", "height", "weight", "gpa", "test_score", "stats", "profile_link"]) out[k] = val(k) || null;
+      for (const k of ["name", "sport", "position", "number", "school", "mascot", "height", "weight", "gpa", "test_score", "stats", "profile_link"]) out[k] = val(k) || null;
       out.grad_year = parseInt(val("grad_year"), 10) || null;
       out.details = readDetails();
       return out;

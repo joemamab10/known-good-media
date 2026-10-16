@@ -13,7 +13,7 @@ create table if not exists public.athletes (
   id uuid primary key default gen_random_uuid(),
   parent_id uuid not null references auth.users on delete cascade,
   name text not null,
-  sport text, position text, grad_year int, school text, number text,
+  sport text, position text, grad_year int, school text, number text, mascot text,
   height text, weight text, gpa text, test_score text,
   details jsonb not null default '[]'::jsonb,   -- [{"label":"Exit Velo","value":"78 MPH"}]
   stats text, profile_link text,
