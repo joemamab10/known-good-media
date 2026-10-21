@@ -31,6 +31,8 @@ create table if not exists public.orders (
   package text not null,
   price int,
   rush boolean not null default false,
+  outreach text,                                 -- recruiting outreach add-on: starter | iowa | national
+  outreach_followup boolean not null default false,
   film_links text[] not null default '{}',
   notes text, music text, team_color text,
   status text not null default 'submitted'
@@ -80,6 +82,7 @@ begin
     else
       new.paid := old.paid; new.reel_url := old.reel_url; new.vertical_url := old.vertical_url;
       new.package := old.package; new.price := old.price;
+      new.outreach := old.outreach; new.outreach_followup := old.outreach_followup;
       -- a parent may only move a draft in review to "revision" (request changes)
       if new.status is distinct from old.status and not (old.status = 'review' and new.status = 'revision') then
         new.status := old.status;

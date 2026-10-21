@@ -26,6 +26,19 @@ window.KGM_CONFIG = {
   ],
   RUSH: { price: 35, label: "Rush delivery (48 hours)" },
 
+  // Recruiting outreach: an optional add-on to any recruiting package (not youth).
+  // Add each one as an optional item on every package's Stripe Payment Link, the same way as rush,
+  // and paste a standalone link into `pay` for families who already have a reel.
+  OUTREACH: [
+    { id: "starter", name: "Outreach Starter", price: 29, pay: "",
+      includes: ["Personal coach email written for the athlete", "Guide: who to email, when, how to follow up", "Family sends it from their own email"] },
+    { id: "iowa", name: "Iowa Outreach", price: 99, pay: "",
+      includes: ["Everything in Starter", "20-30 Iowa coaches matched to the athlete's level (D1, D2, D3, NAIA, JUCO)", "Each email personalized to the school", "Tracking sheet of who was contacted and who replied"] },
+    { id: "national", name: "National Outreach", price: 249, pay: "",
+      includes: ["Everything in Iowa Outreach", "60-100 coaches across the region or nationwide", "Focused on the levels that fit the athlete"] },
+  ],
+  OUTREACH_FOLLOWUP: { price: 49, label: "Season follow-up (2 more rounds with new film or stats)", pay: "" },
+
   // Film uploads larger than this go by link instead (Supabase free plan caps files at 50 MB;
   // raise this after upgrading to the Pro plan).
   MAX_UPLOAD_MB: 50,

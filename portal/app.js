@@ -273,7 +273,7 @@
   const STEP_NAMES = ["Athlete", "Photo", "Film", "Package", "Review"];
   async function wizard(me, pkg) {
     const athletes = (await B.listAthletes()).filter((a) => a.parent_id === me.id);
-    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", heard: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) && !pkgOf(pkg).hidden ? pkg : "well-known", rush: false, photo_url: null };
+    const state = { step: 0, athlete: {}, films: [], links: [""], notes: "", heard: "", music: "", team_color: "#2F7BFF", package: pkgOf(pkg) && !pkgOf(pkg).hidden ? pkg : "well-known", rush: false, outreach: "", outreach_followup: false, photo_url: null };
     const root = h("section", { class: "stack" });
     let form;
     const draw = async () => {
@@ -411,7 +411,32 @@
       rushRow.hidden = off;
       if (off) { state.rush = false; rush.checked = false; }
     };
-    const drawOpts = () => { syncRush(); opts.replaceChildren(
+    // recruiting outreach add-on (recruiting packages only)
+    const orOpts = cfg.OUTREACH || [];
+    const orSel = h("select", { id: "outreach" }, h("option", { value: "" }, "No thanks"),
+      ...orOpts.map((x) => h("option", { value: x.id }, `${x.name} (+${money(x.price)})`)));
+    orSel.value = state.outreach;
+    const fu = h("input", { type: "checkbox", id: "orfu", style: "width:22px;min-height:22px" });
+    fu.checked = state.outreach_followup;
+    const fuRow = h("label", { class: "row", for: "orfu", style: "cursor:pointer;margin-top:8px;flex-wrap:nowrap;align-items:flex-start" }, fu,
+      h("span", { style: "flex:1;min-width:0" }, cfg.OUTREACH_FOLLOWUP ? `${cfg.OUTREACH_FOLLOWUP.label} ` : "", h("span", { class: "muted" }, cfg.OUTREACH_FOLLOWUP ? "+" + money(cfg.OUTREACH_FOLLOWUP.price) : "")));
+    const orInfo = h("ul", { class: "small muted", style: "margin:8px 0 0" });
+    const orRow = h("div", { class: "card tight" },
+      h("label", { class: "f", for: "outreach" }, h("strong", {}, "Add recruiting outreach?"), orSel,
+        h("span", { class: "hint" }, "We write the coach emails and build a list of programs at the right level. You send them from your own email.")),
+      orInfo, fuRow);
+    const syncOutreach = () => {
+      const youthPick = pkgOf(state.package)?.line === "youth";
+      orRow.hidden = youthPick || !orOpts.length;
+      if (youthPick) { state.outreach = ""; orSel.value = ""; }
+      const pick = orOpts.find((x) => x.id === state.outreach);
+      orInfo.replaceChildren(...(pick ? pick.includes.map((x) => h("li", {}, x)) : []));
+      fuRow.hidden = !pick || pick.id === "starter" || !cfg.OUTREACH_FOLLOWUP;
+      if (fuRow.hidden) { state.outreach_followup = false; fu.checked = false; }
+    };
+    orSel.addEventListener("change", () => { state.outreach = orSel.value; syncOutreach(); });
+    fu.addEventListener("change", () => (state.outreach_followup = fu.checked));
+    const drawOpts = () => { syncRush(); syncOutreach(); opts.replaceChildren(
       ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:0" }, "Recruiting reels")] : []),
       ...recruiting.map(card),
       ...(youth.length ? [h("p", { class: "eyebrow", style: "grid-column:1/-1;margin:14px 0 0" }, "Youth"), ...youth.map(card)] : [])); };
@@ -423,14 +448,28 @@
     const heard = h("select", { id: "heard" }, ...["", "A friend or family", "A coach or team", "Instagram", "TikTok", "X", "Google search", "At a game or event", "Other"]
       .map((x) => h("option", { value: x }, x || "Choose…")));
     heard.value = state.heard; heard.addEventListener("change", () => (state.heard = heard.value));
-    return h("div", { class: "stack" }, opts, rushRow,
+    return h("div", { class: "stack" }, opts, rushRow, orRow,
       h("div", { class: "grid" },
         h("label", { class: "f", for: "color" }, "Team color", color, h("span", { class: "hint" }, "We brand the reel in your team's color.")),
         h("label", { class: "f", for: "music" }, "Music vibe", music, h("span", { class: "hint" }, "We use licensed music so the reel won't get muted on social.")),
         h("label", { class: "f", for: "heard" }, "How did you hear about us?", heard, h("span", { class: "hint" }, "Optional. It helps us know what's working."))));
   }
 
-  function total(state) { return (pkgOf(state.package)?.price || 0) + (state.rush && !pkgOf(state.package)?.no_rush ? cfg.RUSH.price : 0); }
+  function outreachOf(id) { return (cfg.OUTREACH || []).find((x) => x.id === id); }
+  function outreachTotal(o) {
+    const x = outreachOf(o.outreach);
+    return x ? x.price + (o.outreach_followup && cfg.OUTREACH_FOLLOWUP ? cfg.OUTREACH_FOLLOWUP.price : 0) : 0;
+  }
+  function outreachLabel(o) {
+    const x = outreachOf(o.outreach);
+    return x ? x.name + (o.outreach_followup ? " + season follow-up" : "") : "";
+  }
+  // what the parent taps "Add" on at Stripe checkout (names match the Stripe products)
+  function outreachAddNames(o) {
+    const x = outreachOf(o.outreach);
+    return x ? x.name + (o.outreach_followup ? " and Outreach Season Follow-up" : "") : "";
+  }
+  function total(state) { return (pkgOf(state.package)?.price || 0) + (state.rush && !pkgOf(state.package)?.no_rush ? cfg.RUSH.price : 0) + outreachTotal(state); }
 
   function reviewStep(state) {
     const a = state.athlete, p = pkgOf(state.package);
@@ -448,6 +487,8 @@
         h("div", { class: "row between" }, h("span", {}, p.name), h("strong", {}, money(p.price))),
         state.rush ? h("div", { class: "row between" }, h("span", {}, cfg.RUSH.label), h("strong", {}, money(cfg.RUSH.price))) : null,
         state.rush && !pkgOf(state.package)?.pay_rush ? h("p", { class: "callout small", style: "margin:8px 0 0" }, h("strong", {}, "Rush: "), `on the payment page, tap Add next to ${cfg.RUSH.label} so your total is ${money(total(state))}.`) : null,
+        state.outreach ? h("div", { class: "row between" }, h("span", {}, outreachLabel(state)), h("strong", {}, money(outreachTotal(state)))) : null,
+        state.outreach ? h("p", { class: "callout small", style: "margin:8px 0 0" }, h("strong", {}, "Outreach: "), `on the payment page, tap Add next to ${outreachAddNames(state)} so your total is ${money(total(state))}.`) : null,
         h("div", { class: "row between", style: "border-top:1px solid var(--line);padding-top:12px" }, h("span", { class: "h-md" }, "Total"), h("span", { class: "h-lg" }, money(total(state)))),
         h("p", { class: "small muted", style: "margin:0" }, B.mode === "demo" ? "Demo mode: no payment is taken." : "You'll pay securely with Stripe. Your film uploads when you place the order.")));
   }
@@ -457,7 +498,7 @@
     const a = state.athlete;
     try {
       const order = await B.createOrder({
-        athlete_id: a.id, athlete: { ...a, photo_url: undefined }, package: state.package, price: total(state), rush: state.rush,
+        athlete_id: a.id, athlete: { ...a, photo_url: undefined }, package: state.package, price: total(state), rush: state.rush, outreach: state.outreach || null, outreach_followup: !!state.outreach_followup,
         film_links: state.links.map((l) => l.trim()).filter(Boolean), notes: [state.heard ? `Heard about us: ${state.heard}` : "", state.notes].filter(Boolean).join("\n") || null, music: state.music || null, team_color: state.team_color,
       });
       if (state.films.length) {
@@ -507,6 +548,7 @@
       const pay = (o.rush && p?.pay_rush) || p?.pay;
       act.append(h("div", { class: "callout" }, h("p", { style: "margin:0 0 10px" }, h("strong", {}, "Payment needed. "), "We start as soon as it's in."),
         o.rush && !p?.pay_rush ? h("p", { class: "small", style: "margin:0 0 10px" }, h("strong", {}, "Rush order: "), `on the payment page, tap Add next to ${cfg.RUSH.label} so the total is ${money(o.price)}.`) : null,
+        o.outreach ? h("p", { class: "small", style: "margin:0 0 10px" }, h("strong", {}, "Outreach: "), `on the payment page, tap Add next to ${outreachAddNames(o)} so the total is ${money(o.price)}.`) : null,
         pay && B.mode !== "demo" ? h("a", { class: "btn", href: `${pay}?client_reference_id=${encodeURIComponent(o.id)}`, onclick: () => rememberPay(o.id) }, `Pay ${money(o.price)}`)
           : h("p", { class: "small muted", style: "margin:0" }, B.mode === "demo" ? "Demo mode: payment is skipped." : `Questions? Email ${cfg.CONTACT_EMAIL}.`)));
     }
@@ -539,7 +581,7 @@
         h("div", { class: "card" }, h("h2", { class: "h-md", style: "margin-bottom:14px" }, "Progress"), tl),
         h("div", { class: "card stack" }, h("h2", { class: "h-md" }, "Order details"),
           h("dl", { class: "kv" },
-            h("dt", {}, "Package"), h("dd", {}, `${p?.name || o.package}${o.rush ? " + rush" : ""} · ${money(o.price)}${o.paid ? (o.paid_amount != null ? ` · paid ${money(o.paid_amount)} via Stripe` : " · paid") : ""}`,
+            h("dt", {}, "Package"), h("dd", {}, `${p?.name || o.package}${o.rush ? " + rush" : ""}${o.outreach ? " + " + outreachLabel(o) : ""} · ${money(o.price)}${o.paid ? (o.paid_amount != null ? ` · paid ${money(o.paid_amount)} via Stripe` : " · paid") : ""}`,
               o.paid && o.paid_amount != null && Number(o.paid_amount) < Number(o.price)
                 ? h("span", { class: "small", style: "display:block;color:var(--warn,#FFB547)" }, `Paid ${money(o.price - o.paid_amount)} less than the order total. Check Stripe.`) : null),
             h("dt", {}, "Athlete"), h("dd", {}, [a.sport, a.position, a.grad_year && "Class of " + a.grad_year, a.school].filter(Boolean).join(" · ") || "–"),
@@ -612,7 +654,7 @@
       tbody.replaceChildren(...(shown.length ? shown.map((o) => h("tr", {},
         h("td", {}, h("a", { href: "#/order/" + o.id }, o.athlete?.name || "Athlete")),
         h("td", {}, [o.athlete?.sport, o.athlete?.grad_year].filter(Boolean).join(" · ")),
-        h("td", {}, pkgOf(o.package)?.name || o.package, o.rush ? " + rush" : ""),
+        h("td", {}, pkgOf(o.package)?.name || o.package, o.rush ? " + rush" : "", o.outreach ? " + outreach" : ""),
         h("td", { class: "num" }, money(o.price), o.paid ? " ✓" : ""),
         h("td", {}, pill(o.status)),
         h("td", { class: "num" }, fmtDate(o.created_at)),
