@@ -214,7 +214,7 @@ main [id] { scroll-margin-top: 100px; }
 }
 
 /* "Your reel here" sits on its own row under the three reels */
-.work-card.work-cta { grid-column: 1 / -1; min-height: 110px; }
+.work-card.work-cta { min-height: 110px; }  /* fills the open spot beside the last reel */
 
 /* Youth line, under the recruiting packages */
 .youth { margin-top: clamp(56px, 7vw, 88px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); text-align: center; scroll-margin-top: 100px; }
