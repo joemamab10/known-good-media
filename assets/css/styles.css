@@ -193,7 +193,12 @@ main [id] { scroll-margin-top: 100px; }
   .nav-logo img { width: 100px; height: auto; }
   .book .btn { width: 100%; max-width: 300px; }
   .eyebrow { letter-spacing: 0.2em; font-size: 13px; }
-  .packages, .steps, .work-grid, .band { grid-template-columns: minmax(0, 1fr); }
+  .packages, .steps, .work-grid { grid-template-columns: minmax(0, 1fr); }
+  /* the four selling points sit two across on phones, so they take half the scroll */
+  .band { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .band-item { padding: 20px 14px; gap: 4px; }
+  .band-item strong { font-size: 18px; line-height: 1.15; letter-spacing: 0.04em; }
+  .band-item span { font-size: 14px; line-height: 1.4; }
 }
 
 /* Our why */

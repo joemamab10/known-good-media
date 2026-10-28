@@ -49,7 +49,7 @@
   async function chrome(me) {
     const top = document.getElementById("top");
     top.replaceChildren(...[
-      h("a", { class: "wordmark", href: "../", title: "Known Good Media home", "aria-label": "Known Good Media home" }, "K", h("b", {}, "NOW"), "N"),
+      h("a", { class: "wordmark", href: "../", title: "Known Good Media home" }, h("img", { src: "../brand/logo-nav.svg", alt: "Known Good Media", width: "112", height: "50" })),
       h("a", { class: "tag", href: "#/", style: "text-decoration:none" }, "Parent Portal"),
       h("span", { class: "spacer" }),
       me ? h("span", { class: "who" }, me.email) : null,
