@@ -221,6 +221,7 @@ main [id] { scroll-margin-top: 100px; }
 .youth .eyebrow { margin-bottom: 8px; }
 .youth-title { margin: 0 0 12px; font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(34px, 4.5vw, 54px); line-height: 1; letter-spacing: 0.02em; }
 .youth .section-sub { margin-bottom: 0; }
+.youth .packages { text-align: left; }  /* cards inside a centered add-on section read like the main packages */
 .youth-packages { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin-left: auto; margin-right: auto; text-align: left; }
 @media (max-width: 720px) { .youth-packages { grid-template-columns: minmax(0, 1fr); } }
 
