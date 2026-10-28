@@ -62,6 +62,7 @@ img { max-width: 100%; height: auto; display: block; }
   letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
   background: var(--blue-dark); color: var(--white) !important;
   border: 2px solid var(--blue-dark); border-radius: 6px;
+  white-space: nowrap;
 }
 .btn:hover { background: #184CB8; border-color: #184CB8; }
 .btn-ghost { background: transparent; border-color: var(--blue); }
@@ -70,6 +71,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* Hero */
 .hero {
+  position: relative; overflow: hidden; isolation: isolate;
   text-align: center;
   padding: clamp(64px, 12vw, 140px) 16px clamp(56px, 9vw, 110px);
 }
@@ -154,7 +156,7 @@ img { max-width: 100%; height: auto; display: block; }
 .video-frame { position: relative; overflow: hidden; width: 100%; height: 0; padding-top: 56.25%; background: #000; }
 .video-frame iframe { position: absolute; top: 0; left: 0; width: 1px; min-width: 100%; max-width: 100%; height: 100%; border: 0; }
 .work-video figcaption { padding: 12px 14px; font-size: 14px; }
-a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
+a.work-card:hover { border-color: var(--blue); color: var(--white); }
 
 /* Footer */
 .footer {
@@ -166,7 +168,6 @@ a.work-card:hover { border-color: var(--blue); color: var(--white, #fff); }
 .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; }
 .footer-links a { text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; }
 .footer-small { font-size: 13px; opacity: .7; }
-.btn { white-space: nowrap; }
 
 /* Responsive */
 /* Section links land below the sticky menu bar */
@@ -186,7 +187,7 @@ main [id] { scroll-margin-top: 100px; }
 }
 @media (max-width: 720px) {
   .nav nav a:not(.btn) { display: none; }
-  .nav nav a.nav-account { display: inline; font-size: 13px; color: var(--muted, #A9B0BB); }
+  .nav nav a.nav-account { display: inline; font-size: 13px; color: var(--muted); }
   .nav nav { gap: 10px; }
   .nav .btn-small { min-height: 40px; padding: 0 12px; font-size: 14px; letter-spacing: 0.08em; }
   .nav-logo img { width: 100px; height: auto; }
@@ -213,20 +214,19 @@ main [id] { scroll-margin-top: 100px; }
   .section-alt.why { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* "Your reel here" sits on its own row under the three reels */
-.work-card.work-cta { min-height: 110px; }  /* fills the open spot beside the last reel */
+/* "Your reel here" fills the open grid spot beside the last reel */
+.work-card.work-cta { min-height: 110px; }
 
-/* Youth line, under the recruiting packages */
-.youth { margin-top: clamp(56px, 7vw, 88px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); text-align: center; scroll-margin-top: 100px; }
-.youth .eyebrow { margin-bottom: 8px; }
-.youth-title { margin: 0 0 12px; font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(34px, 4.5vw, 54px); line-height: 1; letter-spacing: 0.02em; }
-.youth .section-sub { margin-bottom: 0; }
-.youth .packages { text-align: left; }  /* cards inside a centered add-on section read like the main packages */
+/* Add-on blocks under the recruiting packages (Outreach, Youth) */
+.addon { margin-top: clamp(56px, 7vw, 88px); padding-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); text-align: center; scroll-margin-top: 100px; }
+.addon .eyebrow { margin-bottom: 8px; }
+.addon-title { margin: 0 0 12px; font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(34px, 4.5vw, 54px); line-height: 1; letter-spacing: 0.02em; }
+.addon .section-sub { margin-bottom: 0; }
+.addon .packages { text-align: left; }  /* cards read like the main packages */
 .youth-packages { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin-left: auto; margin-right: auto; text-align: left; }
 @media (max-width: 720px) { .youth-packages { grid-template-columns: minmax(0, 1fr); } }
 
 /* Hero: muted loop of real plays behind the wordmark */
-.hero { position: relative; overflow: hidden; isolation: isolate; }
 .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; pointer-events: none; }
 .hero::before { content: ""; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(180deg, rgba(11, 13, 16, 0.82) 0%, rgba(11, 13, 16, 0.70) 40%, rgba(11, 13, 16, 0.85) 75%, var(--black) 100%); }
@@ -244,3 +244,12 @@ main [id] { scroll-margin-top: 100px; }
 .faq details[open] summary::after { content: "\2212"; }
 .faq summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 10px; }
 .faq details p { margin: 0; padding: 0 20px 18px; color: var(--muted); }
+
+/* Reel thumbnails: tap to load the YouTube player */
+.yt { position: absolute; inset: 0; display: block; cursor: pointer; }
+.yt img { width: 100%; height: 100%; object-fit: cover; }
+.yt::after { content: ""; position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; transform: translate(-50%, -50%);
+  border-radius: 12px; background: rgba(11, 13, 16, .78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%23fff'/%3E%3C/svg%3E") center / 30px no-repeat;
+  transition: background-color .2s; }
+.yt:hover::after, .yt:focus-visible::after { background-color: var(--blue-dark); }
+.yt:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }

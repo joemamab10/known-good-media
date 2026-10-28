@@ -16,7 +16,7 @@
   <meta property="og:image" content="https://knowngoodmedia.com/brand/png/logo-card-dark-1200.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@knowngoodmedia">
-  <link rel="stylesheet" href="assets/css/styles.css?v=17">
+  <link rel="stylesheet" href="assets/css/styles.css?v=18">
 </head>
 <body>
 
@@ -85,28 +85,48 @@
     <p class="section-sub">Recent reels from our athletes.</p>
     <div class="work-grid">
       <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/YU0tKHSQDEI?rel=0&amp;modestbranding=1" title="Henry Smid, RB, Class of 2028: football highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="video-frame"><a class="yt" href="https://youtu.be/YU0tKHSQDEI" data-yt="YU0tKHSQDEI" aria-label="Play Henry Smid, RB, Class of 2028: football highlights"><img src="https://i.ytimg.com/vi/YU0tKHSQDEI/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"></a></div>
         <figcaption>Henry Smid · Football · RB · Class of 2028</figcaption>
       </figure>
       <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/j9SNsFwadj4?rel=0&amp;modestbranding=1" title="Caleb Carlton, FS, Class of 2028: football highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="video-frame"><a class="yt" href="https://youtu.be/j9SNsFwadj4" data-yt="j9SNsFwadj4" aria-label="Play Caleb Carlton, FS, Class of 2028: football highlights"><img src="https://i.ytimg.com/vi/j9SNsFwadj4/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"></a></div>
         <figcaption>Caleb Carlton · Football · FS · Class of 2028</figcaption>
       </figure>
       <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GEwlCEUNE8o?rel=0&amp;modestbranding=1" title="Max Bejarno, 1B/3B, Class of 2029: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="video-frame"><a class="yt" href="https://youtu.be/GEwlCEUNE8o" data-yt="GEwlCEUNE8o" aria-label="Play Max Bejarno, 1B/3B, Class of 2029: baseball highlights"><img src="https://i.ytimg.com/vi/GEwlCEUNE8o/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"></a></div>
         <figcaption>Max Bejarno · Baseball · 1B/3B · Class of 2029</figcaption>
       </figure>
       <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/KQTa3pvRxlU?rel=0&amp;modestbranding=1" title="Landry Hall, CF, Class of 2032: baseball highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="video-frame"><a class="yt" href="https://youtu.be/KQTa3pvRxlU" data-yt="KQTa3pvRxlU" aria-label="Play Landry Hall, CF, Class of 2032: baseball highlights"><img src="https://i.ytimg.com/vi/KQTa3pvRxlU/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"></a></div>
         <figcaption>Landry Hall · Baseball · CF · Class of 2032</figcaption>
       </figure>
       <figure class="work-card work-video">
-        <div class="video-frame"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/niFUxguE9Ok?rel=0&amp;modestbranding=1" title="Grady Bejarno, RB/DE, Class of 2032: football highlights" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <div class="video-frame"><a class="yt" href="https://youtu.be/niFUxguE9Ok" data-yt="niFUxguE9Ok" aria-label="Play Grady Bejarno, RB/DE, Class of 2032: football highlights"><img src="https://i.ytimg.com/vi/niFUxguE9Ok/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"></a></div>
         <figcaption>Grady Bejarno · Football · RB/DE · Class of 2032</figcaption>
       </figure>
       <a class="work-card work-cta" href="portal/#/new"><span>Your reel here · Get known</span></a>
     </div>
   </section>
+  <script>
+    // Reels: show the YouTube thumbnail and load the real player only when someone taps play.
+    // Five players loading up front is several MB of YouTube code; this keeps the page light on phones.
+    document.querySelectorAll('a.yt').forEach(function (a) {
+      // YouTube only has the HD thumbnail for some uploads; when it's missing it sends a tiny gray placeholder instead.
+      var img = a.querySelector('img');
+      function check() { if (img.src.indexOf('maxres') > -1 && img.naturalWidth && img.naturalWidth < 200) img.src = img.src.replace('maxresdefault', 'hqdefault'); }
+      img.addEventListener('load', check); if (img.complete) check();
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?rel=0&modestbranding=1&autoplay=1&playsinline=1';
+        f.title = a.getAttribute('aria-label').replace(/^Play /, '');
+        f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+        f.referrerPolicy = 'strict-origin-when-cross-origin';
+        f.allowFullscreen = true;
+        a.replaceWith(f);
+      });
+    });
+  </script>
 
   <section id="why" class="section section-alt why">
     <div class="why-story">
@@ -171,9 +191,9 @@
       <p><strong>Our promise:</strong> if the first draft isn't right, we fix it. If it's still not right, you get your money back.</p>
     </div>
 
-    <div id="outreach" class="youth">
+    <div id="outreach" class="addon">
       <p class="eyebrow">Add-on</p>
-      <h3 class="youth-title">Recruiting <span class="accent">outreach</span></h3>
+      <h3 class="addon-title">Recruiting <span class="accent">outreach</span></h3>
       <p class="section-sub">A great reel only works if the right coaches see it. We write the emails and build a list of programs at the level that fits your athlete, from Division I to NAIA and junior college. You send them from your own email, so coaches hear from your family directly.</p>
       <div class="packages">
         <article class="pkg">
@@ -215,9 +235,9 @@
       </div>
     </div>
 
-    <div id="youth" class="youth">
+    <div id="youth" class="addon">
       <p class="eyebrow">Youth</p>
-      <h3 class="youth-title">For younger <span class="accent">athletes</span></h3>
+      <h3 class="addon-title">For younger <span class="accent">athletes</span></h3>
       <p class="section-sub">Not every reel is for a college coach. For the younger ones, a highlight to keep, share with family and be proud of.</p>
       <div class="packages youth-packages">
         <article class="pkg">
