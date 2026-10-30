@@ -608,9 +608,14 @@
         h("label", { class: "row", for: "paid", style: "align-self:end;min-height:44px;cursor:pointer" }, paid, h("span", {}, "Payment received")),
         h("label", { class: "f full", for: "reel" }, "Reel link", reel),
         h("label", { class: "f full", for: "vert" }, "Vertical cut link", vert)),
-      h("div", { class: "row" }, h("button", { class: "btn", onclick: async () => {
-        await B.updateOrder(o.id, { status: status.value, paid: paid.checked, reel_url: reel.value.trim() || null, vertical_url: vert.value.trim() || null });
-        toast("Order updated"); render();
+      h("div", { class: "row" }, h("button", { class: "btn", onclick: async (e) => {
+        const btn = e.currentTarget; btn.disabled = true;
+        try {
+          await B.updateOrder(o.id, { status: status.value, paid: paid.checked, reel_url: reel.value.trim() || null, vertical_url: vert.value.trim() || null });
+          toast("Order updated"); render();
+        } catch (err) {   // show why instead of failing silently
+          toast("Couldn't save: " + (err.message || err)); btn.disabled = false;
+        }
       } }, "Save"), h("span", { class: "small muted" }, `Parent: ${o.parent_email || "–"}`),
         h("button", { class: "btn ghost sm danger", style: "margin-left:auto", onclick: () => deleteOrder(o, () => go("#/admin")) }, "Delete order")));
   }
