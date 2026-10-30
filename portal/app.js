@@ -510,6 +510,7 @@
           await B.uploadFilm(order.id, f.file, (p) => (fill.style.width = p + "%"));
         }
       }
+      trackEvent("order-submitted-" + state.package + (state.outreach ? "+outreach" : ""));
       const pkgP = pkgOf(state.package);
       const pay = (state.rush && pkgP?.pay_rush) || pkgP?.pay;
       if (pay && B.mode !== "demo") {
@@ -723,6 +724,18 @@
     history.replaceState(null, "", location.pathname + (id ? "#/order/" + id : location.hash));
   })();
 
+  // Visit counts (GoatCounter): the screen name only, never order ids or emails; the owner isn't counted.
+  let lastTracked = "";
+  function track(me, route, id) {
+    if (me && me.is_admin) return;
+    const screen = !me ? "sign-in" : route === "new" ? "new" + (id && cfg.PACKAGES.some((p) => p.id === id) ? "/" + id : "")
+      : ["order", "athlete"].includes(route) ? route : route || "my-orders";
+    if (screen === lastTracked) return;
+    lastTracked = screen;
+    const send = () => window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path: "/portal/" + screen, title: "Portal: " + screen });
+    if (window.goatcounter && window.goatcounter.count) send(); else setTimeout(send, 1500);
+  }
+  function trackEvent(name) { try { window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path: name, event: true }); } catch (e) {} }
   let rendering = 0;
   async function render() {
     const my = ++rendering;
@@ -754,6 +767,7 @@
         "We're getting started on the reel. It can take a minute for the order to show as paid."));
     }
     if (my === rendering) $app.replaceChildren(view);
+    track(me, route, id);
   }
   window.addEventListener("hashchange", render);
   B.onChange(() => render());
